@@ -16,16 +16,20 @@ class Email(BaseModel):
     attachments: list[Attachment] = Field(default_factory=list)
 
 class EmailAnalysis(BaseModel):
-    summary: str
+    summary: str = Field(
+        description="A concise summary of the email content."
+    )
 
     category: Literal[
-        "work",
         "recruitment",
         "education",
+        "work",
         "finance",
+        "security",
+        "account",
         "newsletter",
         "personal",
-        "account",
+        "promotion",
         "other",
     ]
 
@@ -38,5 +42,25 @@ class EmailAnalysis(BaseModel):
     action_required: bool
 
     action_items: list[str] = Field(
-        default_factory=list
+        default_factory=list,
+        description="A list of specific action items or tasks that the user should take based on the email content."
+    )
+
+
+class AnalyzedEmail(BaseModel):
+    email: Email
+    analysis: EmailAnalysis
+
+
+class InboxSummary(BaseModel):
+    total_emails: int
+
+    high_priority: int
+    medium_priority: int
+    low_priority: int
+
+    action_required: int
+
+    categories: dict[str, int] = Field(
+        default_factory=dict
     )
