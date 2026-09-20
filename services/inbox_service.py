@@ -1,6 +1,10 @@
 from collections import Counter
 
-from gmail.email_models import AnalyzedEmail , InboxSummary
+from models.email_models import AnalyzedEmail
+from models.inbox_model import InboxSummary
+from gmail.email_service import get_email_by_id, get_latest_message_ids 
+from ai.email_analyzer import analyze_emails , analyze_email
+
 
 
 def build_inbox_summary(
@@ -77,3 +81,23 @@ def filter_by_category(
         for item in emails
         if item.analysis.category == category
     ]
+
+
+def analyze_latest_inbox(
+    gmail_service,
+    max_results: int = 5,
+    query: str | None = None,
+) -> InboxSummary:
+    message_ids = get_latest_message_ids(
+        gmail_service,
+        max_results=max_results,
+        query=query,
+    )
+
+    emails = [
+        get_email_by_id(gmail_service, message_id)
+        for message_id in message_ids
+    ]
+
+    analyzed_emails = analyze_emails(emails)
+    return build_inbox_summary(analyzed_emails)

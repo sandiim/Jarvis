@@ -1,9 +1,8 @@
 import os
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
-from langchain_core.prompts import ChatPromptTemplate
 
-from gmail.email_models import EmailAnalysis , Email , AnalyzedEmail
+from models.email_models import Email, EmailAnalysis, AnalyzedEmail
 from ai.prompts import EMAIL_ANALYSIS_SYSTEM_PROMPT
 
 
